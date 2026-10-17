@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vikaschouhan06.github.io/sitemap.xml
