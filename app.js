@@ -437,6 +437,36 @@
     emailLink.addEventListener(ev, function () { setState({ emailHover: false }); });
   });
 
+  /* ------------------------------------------------- résumé preview */
+
+  var cvModal = $('#cv-modal');
+  var cvFrame = $('#cv-frame');
+  var cvOpener = null;
+
+  function cvOpen(opener) {
+    cvOpener = opener || null;
+    /* mount the PDF on first open so it isn't fetched with the page */
+    if (!cvFrame.getAttribute('src')) cvFrame.setAttribute('src', cvFrame.getAttribute('data-src'));
+    cvModal.hidden = false;
+    setState({ bubble: null });
+    $('#cv-close').focus();
+  }
+
+  function cvClose() {
+    if (cvModal.hidden) return;
+    cvModal.hidden = true;
+    if (cvOpener && cvOpener.focus) cvOpener.focus();
+    cvOpener = null;
+  }
+
+  $$('[data-cv-open]').forEach(function (btn) {
+    btn.addEventListener('click', function () { cvOpen(btn); });
+  });
+  $('#cv-close').addEventListener('click', cvClose);
+  cvModal.addEventListener('click', function (e) {
+    if (e.target === cvModal) cvClose();
+  });
+
   /* ---------------------------------------------------------------- render */
 
   function render() {
@@ -631,7 +661,10 @@
     }
     poke();
   });
-  document.addEventListener('keydown', poke);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') cvClose();
+    poke();
+  });
 
   var title = document.title;
   document.addEventListener('visibilitychange', function () {

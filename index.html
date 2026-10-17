@@ -78,6 +78,7 @@
       <div class="hero-cta">
         <a href="#work">see the projects &darr;</a>
         <a href="#contact">say hello &rarr;</a>
+        <button type="button" class="linkish" data-cv-open>view r&eacute;sum&eacute; &#8599;</button>
       </div>
       <p class="hero-stats">
         <span class="nw">1000 test cases written</span>
@@ -97,11 +98,16 @@
     <div class="exp">
       <div class="exp-meta">
         <span class="nw">HummCare</span>
-        <span class="nw dim">Sep 2025 &ndash; Mar 2026</span>
+        <span class="nw dim">Sep 2025 &ndash; Present</span>
         <span class="nw dim">Mumbai &middot; Hybrid</span>
       </div>
       <div class="exp-body">
         <h3 class="h3">QA Engineer / Software Tester</h3>
+        <ol class="roles" aria-label="Role progression">
+          <li class="role role-past"><span class="role-dot" aria-hidden="true"></span>QA Intern &middot; Sep 2025 &ndash; Present</li>
+          <li class="role-arrow" aria-hidden="true">&rarr;</li>
+          <li class="role"><span class="role-dot role-dot-now" aria-hidden="true"></span>Full-time QA Engineer &middot; Apr 2026 &ndash; Present</li>
+        </ol>
         <ul class="exp-list" id="exp-list"></ul>
       </div>
     </div>
@@ -146,6 +152,8 @@
         <li><a id="email-link" href="mailto:vikas06cs@gmail.com">vikas06cs@gmail.com <span aria-hidden="true">&rarr;</span></a></li>
         <li><a href="https://linkedin.com/in/vikas-chouhan-85164b273" target="_blank" rel="noopener">linkedin <span aria-hidden="true">&rarr;</span></a></li>
         <li><a href="https://github.com/VikasChouhan06" target="_blank" rel="noopener">github <span aria-hidden="true">&rarr;</span></a></li>
+        <li><button type="button" class="linkish" data-cv-open>r&eacute;sum&eacute; &middot; preview <span aria-hidden="true">&#8599;</span></button></li>
+        <li><a href="Vikas_Chouhan_QA_Resume.pdf" download="Vikas_Chouhan_QA_Resume.pdf">r&eacute;sum&eacute; &middot; download pdf <span aria-hidden="true">&darr;</span></a></li>
         <li class="dim">panvel, navi mumbai</li>
       </ul>
       <div id="contact-anchor" aria-hidden="true"></div>
@@ -166,6 +174,19 @@
     <span class="foot-right nw">all checks passed &#10003; <span class="foot-aside">(on my machine)</span></span>
   </div>
 </footer>
+
+<div id="cv-modal" role="dialog" aria-modal="true" aria-label="R&eacute;sum&eacute; preview" hidden>
+  <div class="cv-panel">
+    <div class="cv-bar">
+      <span class="cv-name">vikas_chouhan_qa_resume.pdf</span>
+      <div class="cv-actions">
+        <a href="Vikas_Chouhan_QA_Resume.pdf" download="Vikas_Chouhan_QA_Resume.pdf">download &darr;</a>
+        <button type="button" id="cv-close" aria-label="Close preview">&times;</button>
+      </div>
+    </div>
+    <iframe id="cv-frame" title="Vikas Chouhan r&eacute;sum&eacute;" data-src="Vikas_Chouhan_QA_Resume.pdf#view=FitH"></iframe>
+  </div>
+</div>
 
 <div id="comp-bubble" aria-live="polite"></div>
 
