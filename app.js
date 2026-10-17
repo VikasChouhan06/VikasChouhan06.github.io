@@ -15,6 +15,9 @@
     });
   }
 
+  var CHECK = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 13 13">' +
+    '<path d="M1.5 7 L5 10.5 L11.5 2.5" fill="none" stroke="#17191c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+
   var BUG_SVG = '<svg aria-hidden="true" width="14" height="12" viewBox="0 0 14 12">' +
     '<ellipse cx="7" cy="7.5" rx="3.8" ry="4.2" fill="#d6402b"></ellipse>' +
     '<circle cx="7" cy="2.6" r="2" fill="#d6402b"></circle>' +
@@ -75,6 +78,7 @@
       '<h3 class="project-name">' + esc(p.name) + '</h3>' +
       '</div>';
 
+    h += '<p class="project-result">' + CHECK + '<span>' + esc(p.result) + '</span></p>';
     h += '<p class="project-context">' + esc(p.context) + '</p>';
 
     h += '<p class="project-tags">' + p.tags.map(function (t, i) {
@@ -168,9 +172,6 @@
       '</div></div>' +
       '</div>';
   }
-
-  var CHECK = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 13 13">' +
-    '<path d="M1.5 7 L5 10.5 L11.5 2.5" fill="none" stroke="#17191c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 
   $('#projects').innerHTML = PROJECTS.map(projectHTML).join('');
   $('#skills-list').innerHTML = SKILLS.map(skillHTML).join('');
@@ -527,7 +528,7 @@
     lastY = y; lastT = t;
 
     var active = null;
-    ['work', 'skills', 'contact'].forEach(function (id) {
+    ['experience', 'work', 'skills', 'contact'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el && el.getBoundingClientRect().top <= 160) active = id;
     });

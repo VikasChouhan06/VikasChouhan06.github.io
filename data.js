@@ -3,6 +3,7 @@
 const PROJECTS = [
   {
     name: 'Wallet & Coins System',
+    result: 'Coin balances stayed correct through full, partial and zero-balance redemption, including rollback when a payment failed.',
     context: 'In-app rewards wallet where users earn coins, or employers provide specific coins to their employees, and redeem them across multiple product features.',
     tags: ['Backend + Android app', 'Razorpay', '5+ features'],
     stations: ['Coins credited', 'Available across 5+ features', 'Applied at checkout'],
@@ -22,6 +23,7 @@ const PROJECTS = [
   },
   {
     name: 'Cashless Claim',
+    result: 'Each claim verified end to end, from submission in the app to review on the dashboard and back.',
     context: 'End-to-end cashless claim journey where users initiate a claim and settle the payable portion using wallet coins.',
     tags: ['Android app + dashboard', 'Wallet coins', 'Cross-platform'],
     stations: ['Claim raised in app', 'Coins applied', 'Reviewed on dashboard', 'Status updated in app'],
@@ -39,6 +41,7 @@ const PROJECTS = [
   },
   {
     name: 'Reimbursement Claims',
+    result: 'Every review outcome checked for the right settled amount and the right coin re-credit.',
     context: 'The pay-first, claim-later journey. Users submit expenses for reimbursement and can offset applicable charges with wallet coins.',
     tags: ['Android app + dashboard', 'Wallet coins', 'Bill uploads'],
     stations: ['Expense submitted', 'Coins applied', 'Reviewed on dashboard'],
@@ -56,6 +59,7 @@ const PROJECTS = [
   },
   {
     name: 'Cancellation & Refund Logic',
+    result: 'Refunds verified to return to the right source: coins to the wallet, cash back through Razorpay.',
     context: 'Cancellation across bookings and purchases, with refunds routed back to whichever method paid.',
     tags: ['Android app + dashboard', 'Razorpay', 'Wallet coins'],
     stations: ['Cancellation requested', 'Refund to original source'],
