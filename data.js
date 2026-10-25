@@ -130,21 +130,26 @@ const BULLETS = [
   'Audited Android builds in MobSF against the OWASP Mobile Top 10, flagging insecure storage and exposed endpoints.'
 ];
 
-/* Companion lines */
+/* Companion lines — the questions a tester actually asks */
 
 const HERO_J = [
-  ['dev: it works on my machine.', 'me: cool, we’ll ship your machine.'],
-  ['dev: that’s not a bug, it’s a feature.', 'me: then it needs a test case.'],
-  ['just one more edge case.']
+  ['a password of only spaces.', 'it saved. of course it saved.'],
+  ['two phones, one free booking.', 'both tapped at once. who wins?'],
+  ['emoji in the phone field.', 'validated. it shouldn’t have.'],
+  ['same button, three screens,', 'three different shades of red.'],
+  ['dev: it works on my machine.', 'me: cool, we’ll ship your machine.']
 ];
 const BUG_J = [
+  'repro: two devices, one balance, tap together.',
+  'the amount field accepts 500 characters.',
+  'refund landed in the wrong wallet. once.',
+  'blank space passed the required-field check.',
   'status: cannot reproduce. steps attached: 14.',
-  'closed as won’t fix. reopened. again.',
   'found on friday, 5:58 pm. sorry.'
 ];
 const SKILL_J = [
-  'i read the requirements. all of them.',
-  'what if the user enters an emoji in the phone field?'
+  'is the date format the same in every feature?',
+  'i read every requirement. then the gaps between them.'
 ];
 const CONTACT_J = [
   'is there a deploy? on a friday?',

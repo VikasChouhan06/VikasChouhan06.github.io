@@ -30,7 +30,12 @@ html {
      position:sticky working on the header */
   overflow-x: hidden;
   overflow-x: clip;
+  /* reserve the scrollbar so locking the page for the dialog shifts nothing */
+  scrollbar-gutter: stable;
 }
+
+/* the page behind the résumé dialog must not scroll */
+html.is-locked { overflow: hidden; }
 
 body {
   margin: 0;
@@ -348,7 +353,15 @@ a:hover { text-decoration-color: var(--accent); }
 
 /* flow — wide */
 
-.flow-wide { margin-top: 48px; display: flex; align-items: flex-start; }
+.flow-wide {
+  margin-top: 48px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+}
+
+.branch-list { margin: 0; padding: 0; }
 
 .station { flex: 1 1 0; min-width: 0; }
 
@@ -417,16 +430,18 @@ a:hover { text-decoration-color: var(--accent); }
   position: absolute;
   bottom: 100%;
   left: 0;
-  width: 260px;
+  width: 284px;
   display: flex;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
   z-index: 5;
   pointer-events: none;
 }
 
 .bubble {
+  position: relative;
   width: max-content;
-  max-width: 240px;
+  /* wide enough that a two-line exchange keeps one line per speaker */
+  max-width: 264px;
   padding: 8px 10px;
   border: 1px solid var(--ink);
   background: var(--bg);
@@ -437,7 +452,34 @@ a:hover { text-decoration-color: var(--accent); }
   text-wrap: pretty;
   text-align: left;
 }
-.bubble span { display: block; }
+.bubble > span { display: block; }
+.bubble .who { color: var(--muted); }
+
+/* The tail: an ink triangle with a background one laid over it, so the 1px
+   rule carries on around the point. --tail is set each frame so it lands over
+   the head whatever size he is; the bug markers point down-left instead. */
+.bubble::before,
+.bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: var(--tail, 32px);
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--ink);
+}
+.bubble::after {
+  top: calc(100% - 1px);
+  right: calc(var(--tail, 32px) + 1px);
+  border-width: 7px;
+  border-bottom: 0;
+  border-top-color: var(--bg);
+}
+
+.bubble-slot .bubble::before { right: auto; left: 9px; }
+.bubble-slot .bubble::after { right: auto; left: 10px; }
 
 .branches { flex: 1.25 1 0; min-width: 0; position: relative; }
 .branches > svg { position: absolute; left: 0; top: 0; overflow: visible; }
@@ -467,7 +509,7 @@ a:hover { text-decoration-color: var(--accent); }
 
 /* flow — narrow */
 
-.flow-narrow { display: none; margin-top: 32px; }
+.flow-narrow { display: none; margin-top: 32px; padding: 0; list-style: none; }
 
 .nstation { display: flex; gap: 16px; min-height: 52px; }
 
@@ -766,7 +808,7 @@ a:hover { text-decoration-color: var(--accent); }
   position: fixed;
   left: 0;
   top: 0;
-  width: 260px;
+  width: 284px;
   height: 0;
   z-index: 31;
   pointer-events: none;
@@ -847,21 +889,28 @@ a:hover { text-decoration-color: var(--accent); }
 }
 .role-dot-now { border: 0; background: var(--ink); }
 
+/* a native dialog: the browser traps focus, handles Escape, makes the page
+   behind it inert and restores focus to whichever button opened it */
 #cv-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  background: rgba(23, 25, 28, .55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: auto;
   padding: clamp(12px, 3vw, 40px);
+  border: 0;
+  background: none;
+  color: var(--ink);
+  overflow: hidden;
 }
-#cv-modal[hidden] { display: none; }
+#cv-modal[open] { display: flex; align-items: center; justify-content: center; }
+#cv-modal::backdrop { background: rgba(23, 25, 28, .55); }
 
 .cv-panel {
   width: min(860px, 100%);
-  height: min(92vh, 1100px);
+  /* the dialog's own padding sets the inset, so just fill what's left */
+  height: 100%;
+  max-height: 1100px;
   background: var(--bg);
   border: 1px solid var(--ink);
   display: flex;
@@ -903,6 +952,17 @@ a:hover { text-decoration-color: var(--accent); }
 }
 
 #cv-frame { flex: 1; width: 100%; border: 0; background: #fff; }
+
+.cv-fallback {
+  flex: none;
+  margin: 0;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.cv-fallback a { color: var(--muted); text-decoration-color: var(--muted); }
 
 /* ---------- breakpoints ---------- */
 

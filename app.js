@@ -52,11 +52,6 @@
 
   /* ----------------------------------------------------------- rendering */
 
-  function flowLabel(p) {
-    return 'Flow: ' + p.stations.join(', then ') +
-      (p.branches.length ? ', then one of: ' + p.branches.join(', ') : '');
-  }
-
   function branchPaths(p) {
     var mid = 5.75;
     return p.branches.map(function (_, i) {
@@ -85,13 +80,16 @@
       return (i > 0 ? '<span aria-hidden="true">&middot;</span>' : '') + '<span class="nw">' + esc(t) + '</span>';
     }).join('') + '</p>';
 
-    h += '<div id="flow-' + pi + '" role="img" aria-label="' + esc(flowLabel(p)) + '">';
+    /* The flow is a real ordered list, not a role="img" blob: screen readers
+       then get the steps and the count, and the bug button inside it stays
+       reachable (role="img" collapses everything under it). */
+    h += '<div id="flow-' + pi + '">';
 
     /* wide flow */
-    h += '<div class="flow-wide">';
+    h += '<ol class="flow-wide" aria-label="Flow">';
     p.stations.forEach(function (s, i) {
       var line = i < p.stations.length - 1 || hasB;
-      h += '<div class="station">' +
+      h += '<li class="station">' +
         '<div class="station-rail">' +
         (line ? '<div class="station-line"></div>' : '') +
         '<div class="flow-dot"></div>' +
@@ -104,45 +102,51 @@
           : '') +
         '</div>' +
         '<div class="station-label">' + esc(s) + '</div>' +
-        '</div>';
+        '</li>';
     });
     if (hasB) {
       var bh = Math.max(1, p.branches.length) * ROW;
-      h += '<div class="branches">' +
+      h += '<li class="branches">' +
         '<svg aria-hidden="true" width="40" height="' + bh + '" viewBox="0 0 40 ' + bh + '">' +
         branchPaths(p).map(function (d) {
           return '<path d="' + d + '" fill="none" stroke="#17191c" stroke-width="1.5"></path>';
         }).join('') +
         '</svg>' +
+        '<ol class="branch-list" aria-label="Then one of">' +
         p.branches.map(function (b) {
-          return '<div class="branch"><div class="dot-static"></div><div class="branch-label">' + esc(b) + '</div></div>';
+          return '<li class="branch"><div class="dot-static"></div><div class="branch-label">' + esc(b) + '</div></li>';
         }).join('') +
-        '</div>';
+        '</ol>' +
+        '</li>';
     }
-    h += '</div>';
+    h += '</ol>';
 
     /* narrow flow */
-    h += '<div class="flow-narrow">';
+    h += '<ol class="flow-narrow" aria-label="Flow">';
     p.stations.forEach(function (s, i) {
       var line = i < p.stations.length - 1 || hasB;
-      h += '<div class="nstation">' +
+      h += '<li class="nstation">' +
         '<div class="nstation-rail">' +
         '<div class="dot-static"></div>' +
         (line ? '<div class="nstation-line"></div>' : '') +
         (i === p.bug ? '<span class="nbug" data-nbug="' + pi + '">' + BUG_SVG + '</span>' : '') +
         '</div>' +
         '<div class="nstation-label">' + esc(s) + '</div>' +
-        '</div>';
+        '</li>';
     });
-    p.branches.forEach(function (b) {
-      h += '<div class="nbranch">' +
-        '<svg aria-hidden="true" width="26" height="22" viewBox="0 0 26 22">' +
-        '<path d="M0.75 0 C0.75 14 8 20 26 20" fill="none" stroke="#17191c" stroke-width="1.5"></path></svg>' +
-        '<div class="dot-static"></div>' +
-        '<div class="branch-label">' + esc(b) + '</div>' +
-        '</div>';
-    });
-    h += '</div>';
+    if (hasB) {
+      h += '<li class="nbranches"><ol class="branch-list" aria-label="Then one of">' +
+        p.branches.map(function (b) {
+          return '<li class="nbranch">' +
+            '<svg aria-hidden="true" width="26" height="22" viewBox="0 0 26 22">' +
+            '<path d="M0.75 0 C0.75 14 8 20 26 20" fill="none" stroke="#17191c" stroke-width="1.5"></path></svg>' +
+            '<div class="dot-static"></div>' +
+            '<div class="branch-label">' + esc(b) + '</div>' +
+            '</li>';
+        }).join('') +
+        '</ol></li>';
+    }
+    h += '</ol>';
 
     h += '</div>'; /* /flow */
 
@@ -343,8 +347,11 @@
     scale = s;
 
     if (bubEl) {
-      var bx = Math.min(W - 272, Math.max(12, x + 160 * s - 260));
-      bubEl.style.transform = 'translate(' + bx + 'px,' + (y - 6) + 'px)';
+      var bx = Math.min(W - 296, Math.max(12, x + 160 * s - 284));
+      bubEl.style.transform = 'translate(' + bx + 'px,' + (y - 10) + 'px)';
+      /* point the tail at his head, which sits at 70/160 across the figure */
+      var tail = (bx + 284) - (x + 70 * s);
+      bubEl.style.setProperty('--tail', Math.round(Math.min(196, Math.max(18, tail))) + 'px');
     }
 
     applyInner();
@@ -353,9 +360,15 @@
 
   /* --------------------------------------------------------- speech */
 
+  var SPEAKER = /^(dev|me): /;
+
   function bubbleHTML(lines) {
     return '<div class="bubble">' + lines.map(function (l) {
-      return '<span>' + esc(l) + '</span>';
+      var m = SPEAKER.exec(l);
+      if (!m) return '<span>' + esc(l) + '</span>';
+      /* set the speaker back so the exchange reads as two voices */
+      return '<span><span class="who">' + esc(m[1]) + ':</span> ' +
+        esc(l.slice(m[0].length)) + '</span>';
     }).join('') + '</div>';
   }
 
@@ -441,30 +454,37 @@
 
   var cvModal = $('#cv-modal');
   var cvFrame = $('#cv-frame');
-  var cvOpener = null;
+  var cvHref = cvFrame.getAttribute('data-src');
 
-  function cvOpen(opener) {
-    cvOpener = opener || null;
+  /* Phones and tablets don't render PDFs in an iframe — they'd get an empty
+     panel — so hand the file straight to the browser's own viewer instead. */
+  var cvInline = !window.matchMedia('(hover: none) and (pointer: coarse)').matches &&
+    typeof cvModal.showModal === 'function';
+
+  function cvOpen() {
+    if (!cvInline) { window.open(cvHref, '_blank', 'noopener'); return; }
     /* mount the PDF on first open so it isn't fetched with the page */
-    if (!cvFrame.getAttribute('src')) cvFrame.setAttribute('src', cvFrame.getAttribute('data-src'));
-    cvModal.hidden = false;
+    if (!cvFrame.getAttribute('src')) cvFrame.setAttribute('src', cvHref);
     setState({ bubble: null });
-    $('#cv-close').focus();
+    cvModal.showModal();
+    document.documentElement.classList.add('is-locked');
   }
 
   function cvClose() {
-    if (cvModal.hidden) return;
-    cvModal.hidden = true;
-    if (cvOpener && cvOpener.focus) cvOpener.focus();
-    cvOpener = null;
+    if (cvModal.open) cvModal.close();
   }
 
   $$('[data-cv-open]').forEach(function (btn) {
-    btn.addEventListener('click', function () { cvOpen(btn); });
+    btn.addEventListener('click', cvOpen);
   });
   $('#cv-close').addEventListener('click', cvClose);
+  /* the padding around the panel belongs to the dialog itself */
   cvModal.addEventListener('click', function (e) {
     if (e.target === cvModal) cvClose();
+  });
+  /* fires for the close button and for Escape, which the dialog handles */
+  cvModal.addEventListener('close', function () {
+    document.documentElement.classList.remove('is-locked');
   });
 
   /* ---------------------------------------------------------------- render */
@@ -541,7 +561,7 @@
 
     $('#comp-btn').setAttribute('aria-label', asleep
       ? 'Vikas, asleep on the Esc key. Click to wake him'
-      : 'Vikas, the site’s bug catcher. Click for a tester joke');
+      : 'Vikas, the site’s bug catcher. Click for an edge case he’d check');
 
     applyInner();
     aim();
@@ -568,6 +588,7 @@
 
     if (dy === 0) return;
     setState({ dir: dy > 0 ? 'down' : 'up', walking: true });
+    stepLegs();
     clearTimeout(timers.walk);
     timers.walk = setTimeout(function () { setState({ walking: false }); }, 150);
 
@@ -579,6 +600,17 @@
       if (!state.narrow) say(['slow down, i’m testing.']);
     }
     poke();
+  }
+
+  /* leg frames only tick while a scroll is actually in progress */
+  function stepLegs() {
+    if (timers.step || rm) return;
+    timers.step = setTimeout(function () {
+      timers.step = null;
+      if (!state.walking) return;
+      setState({ frame: 1 - state.frame });
+      stepLegs();
+    }, 160);
   }
 
   function blinkLoop() {
@@ -641,8 +673,18 @@
     place();
   }
 
+  /* place() measures then writes transforms; once per frame is plenty and it
+     keeps a fast scroll on a cheap phone from thrashing layout */
+  function queuePlace() {
+    if (timers.place) return;
+    timers.place = requestAnimationFrame(function () {
+      timers.place = 0;
+      place();
+    });
+  }
+
   window.addEventListener('resize', onResize);
-  window.addEventListener('scroll', function () { scrollMotion(); place(); }, { passive: true });
+  window.addEventListener('scroll', function () { scrollMotion(); queuePlace(); }, { passive: true });
   window.addEventListener('mousemove', function (e) {
     lastMouse = { x: e.clientX, y: e.clientY };
     poke();
@@ -661,23 +703,11 @@
     }
     poke();
   });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') cvClose();
-    poke();
-  });
-
-  var title = document.title;
-  document.addEventListener('visibilitychange', function () {
-    document.title = document.hidden ? 'come back, the build is still running' : title;
-  });
+  document.addEventListener('keydown', poke);
 
   if (window.ResizeObserver) {
-    new ResizeObserver(function () { place(); }).observe(document.body);
+    new ResizeObserver(queuePlace).observe(document.body);
   }
-
-  setInterval(function () {
-    if (state.walking && !rm) setState({ frame: 1 - state.frame });
-  }, 160);
 
   try {
     if (sessionStorage.getItem('vc-companion-hidden') === '1') state.hidden = true;

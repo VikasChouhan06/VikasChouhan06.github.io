@@ -58,7 +58,10 @@ dismissable for the session on narrow screens (persisted to `sessionStorage`).
 
 ## Accessibility notes
 
-- Flows are exposed as `role="img"` with a text description of the full path.
+- Flows are ordered lists, so screen readers get the steps and their count, and
+  the bug button inside a flow stays reachable.
+- The résumé preview is a native `<dialog>`; on touch devices, where browsers
+  won't render a PDF in an iframe, the file opens in a new tab instead.
 - Disclosures use `aria-expanded` / `aria-controls`; panels animate with
   `grid-template-rows` so content stays in the accessibility tree.
 - Hit targets are 44px minimum; the active nav item carries `aria-current`.
