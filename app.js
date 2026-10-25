@@ -227,6 +227,8 @@
   var hideBtn = $('#comp-hide');
 
   var scale = 1;
+  var lastX = 0;
+  var lastY = 0;
   var lastMouse = null;
   var lastMode;
   var lastHero;
@@ -285,6 +287,27 @@
     if (L > max) { ux *= max / L; uy *= max / L; }
     if (mir) ux = -ux;
     pupils.setAttribute('transform', 'translate(' + ux.toFixed(2) + ' ' + uy.toFixed(2) + ')');
+  }
+
+  /* Positions the speech bubble against wherever the figure currently is.
+     Called from place() and again from render(), because the bubble's height
+     is only known once its lines are in the DOM. */
+  function placeBubble() {
+    if (!bubEl) return;
+    var W = document.documentElement.clientWidth;
+    var s = scale || 1;
+    var bx = Math.min(W - 296, Math.max(12, lastX + 160 * s - 284));
+    var box = bubEl.firstElementChild;
+    var bh = box ? box.offsetHeight : 0;
+    /* On a phone he stands just below the sticky header, so a bubble drawn
+       above him lands behind it — speak downward instead. */
+    var below = bh > 0 && lastY - 10 - bh < (bar ? bar.offsetHeight : 56) + 8;
+    bubEl.classList.toggle('is-below', below);
+    bubEl.style.transform =
+      'translate(' + bx + 'px,' + (below ? lastY + 220 * s + 10 : lastY - 10) + 'px)';
+    /* point the tail at his head, which sits at 70/160 across the figure */
+    var tail = (bx + 284) - (lastX + 70 * s);
+    bubEl.style.setProperty('--tail', Math.round(Math.min(196, Math.max(18, tail))) + 'px');
   }
 
   function place() {
@@ -346,13 +369,9 @@
     comp.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + s + ')';
     scale = s;
 
-    if (bubEl) {
-      var bx = Math.min(W - 296, Math.max(12, x + 160 * s - 284));
-      bubEl.style.transform = 'translate(' + bx + 'px,' + (y - 10) + 'px)';
-      /* point the tail at his head, which sits at 70/160 across the figure */
-      var tail = (bx + 284) - (x + 70 * s);
-      bubEl.style.setProperty('--tail', Math.round(Math.min(196, Math.max(18, tail))) + 'px');
-    }
+    lastX = x;
+    lastY = y;
+    placeBubble();
 
     applyInner();
     aim();
@@ -518,6 +537,7 @@
       slot.innerHTML = on ? bubbleHTML(b.lines) : '';
     });
     bubEl.innerHTML = b && b.pose === 'comp' ? bubbleHTML(b.lines) : '';
+    placeBubble();
 
     /* companion visibility */
     comp.classList.toggle('is-hidden', state.hidden);

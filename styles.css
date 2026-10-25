@@ -481,6 +481,21 @@ a:hover { text-decoration-color: var(--accent); }
 .bubble-slot .bubble::before { right: auto; left: 9px; }
 .bubble-slot .bubble::after { right: auto; left: 10px; }
 
+/* speaking downward: the box hangs from the point instead of sitting on it */
+#comp-bubble.is-below .bubble { top: 0; bottom: auto; }
+#comp-bubble.is-below .bubble::before {
+  top: auto;
+  bottom: 100%;
+  border-top: 0;
+  border-bottom: 8px solid var(--ink);
+}
+#comp-bubble.is-below .bubble::after {
+  top: auto;
+  bottom: calc(100% - 1px);
+  border-top: 0;
+  border-bottom: 7px solid var(--bg);
+}
+
 .branches { flex: 1.25 1 0; min-width: 0; position: relative; }
 .branches > svg { position: absolute; left: 0; top: 0; overflow: visible; }
 
@@ -996,7 +1011,9 @@ a:hover { text-decoration-color: var(--accent); }
   .projects { margin-top: 64px; }
 
   .flow-wide { display: none; }
-  .flow-narrow { display: block; }
+  /* indent so the bug marker, which hangs 17px left of the rail, clears
+     the gutter instead of being cut off at the edge of the screen */
+  .flow-narrow { display: block; padding-left: 18px; }
 
   #contact-anchor { width: 130px; height: 179px; }
 }
@@ -1013,6 +1030,15 @@ a:hover { text-decoration-color: var(--accent); }
   .nav-sep { font-size: 11px; }
 
   .hero-cta { gap: 8px 20px; }
+
+  /* "needs breaking?" is held together by an nbsp and overruns at 44px */
+  .h1-contact { font-size: 34px; }
+
+  /* the role track runs past the screen in one line at this width */
+  .roles { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .role { white-space: normal; align-items: flex-start; }
+  .role-dot { margin-top: 5px; }
+  .role-arrow { transform: rotate(90deg); }
 }
 
 /* ---------- print: recruiters PDF these ---------- */
