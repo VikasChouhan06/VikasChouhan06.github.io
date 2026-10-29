@@ -34,7 +34,9 @@ All copy lives in `data.js`:
 - `PROJECTS` — each entry has `name`, `context`, `tags`, `stations` (the flow
   diagram), `branches` (the fan-out at the end of the flow), `bug` (index of the
   station that gets the red bug marker) and `tested` (the disclosure list).
-- `SKILLS` — `[name, [items...]]`; the count badge is derived from the array length.
+- `SKILLS` — `[name, proof, [items...]]`. The proof line is the one-sentence
+  claim shown above the tool chips; the count badge comes from the array length.
+- `CERTS` — the certification list under the skills section.
 - `BULLETS` — the experience list.
 - `HERO_J` / `BUG_J` / `SKILL_J` / `CONTACT_J` — the companion's lines.
 

@@ -164,7 +164,7 @@
   }
 
   function skillHTML(entry, i) {
-    var name = entry[0], items = entry[1];
+    var name = entry[0], proof = entry[1], items = entry[2];
     return '<div class="skill">' +
       '<h3><button type="button" class="skill-btn" data-toggle="s' + i + '" aria-expanded="false" aria-controls="skill-' + i + '">' +
       '<span class="skill-name">' + esc(name) + '</span>' +
@@ -172,13 +172,19 @@
       '<span class="skill-plus" aria-hidden="true">+</span>' +
       '</button></h3>' +
       '<div class="panel" id="skill-' + i + '"><div>' +
-      '<p class="skill-text">' + esc(items.join(' · ')) + '</p>' +
+      '<p class="skill-proof">' + CHECK + '<span>' + esc(proof) + '</span></p>' +
+      '<ul class="skill-tools">' +
+      items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') +
+      '</ul>' +
       '</div></div>' +
       '</div>';
   }
 
   $('#projects').innerHTML = PROJECTS.map(projectHTML).join('');
   $('#skills-list').innerHTML = SKILLS.map(skillHTML).join('');
+  $('#certs').innerHTML = CERTS.map(function (c) {
+    return '<li>' + esc(c) + '</li>';
+  }).join('');
   $('#exp-list').innerHTML = BULLETS.map(function (b) {
     return '<li>' + CHECK + '<span>' + esc(b) + '</span></li>';
   }).join('');

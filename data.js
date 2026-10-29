@@ -75,59 +75,71 @@ const PROJECTS = [
       'Gateway refund failure handling: no orders left stuck in a cancelled-but-unrefunded state',
       'Dashboard-initiated cancellation and its propagation to the app'
     ]
+  },
+  {
+    name: 'Booking Regression Suite',
+    result: 'The flows that matter every release are checked on real devices before anyone opens the app.',
+    context: 'A Page Object Model suite in Java covering the booking journey, run on BrowserStack through GitHub Actions instead of by hand each release.',
+    tags: ['Java + Appium', 'BrowserStack', 'GitHub Actions'],
+    stations: ['Scheduled weekly, or on demand', 'Runs on BrowserStack real devices', 'Pass or fail reported', 'Report, screenshots, video kept'],
+    branches: [],
+    bug: 2,
+    tested: [
+      'Booking journey end to end: slot selection, payment, family members, reschedule and cancel',
+      'Page Object Model structure, so a changed screen is fixed in one place rather than across every test',
+      'Real devices and browsers on BrowserStack rather than emulators, to catch what only shows on hardware',
+      'GitHub Actions pipeline with a weekly scheduled night run plus on-demand triggers',
+      'Report, screenshots and video retained for every run, so a failure can be reviewed after the fact',
+      'Flaky locators tracked down and stabilised, with AI used to speed up the debugging'
+    ]
   }
 ];
 
 const SKILLS = [
-  ['API & Backend', [
-    'Postman',
-    'REST endpoint & CRUD validation',
-    'Authentication (OAuth 2.0, Bearer, API Key, Basic)',
-    'Request chaining with environment variables',
-    'Schema, status code & response-time assertions',
-    'Collection runner + Newman',
-    'MySQL, Firebase, SQL query validation'
-  ]],
-  ['Automation Frameworks', [
-    'Selenium WebDriver',
-    'Appium (Android & iOS)',
-    'Page Object Model + Page Factory',
-    'TestNG, PyTest',
-    'ExtentReports',
-    'Data-driven test design',
-    'Explicit waits & stable locator strategy'
-  ]],
-  ['Performance & Security', [
-    'Apache JMeter',
-    'Load, stress, spike, soak',
-    'Correlation & parameterization (CSV Data Set)',
-    'HTML dashboard reporting',
-    'MobSF static analysis',
-    'OWASP Mobile Top 10'
-  ]],
-  ['CI/CD & Infrastructure', [
-    'Git & GitHub pull request workflow',
-    'GitHub Actions workflow authoring',
-    'Scheduled (cron) automation runs',
-    'BrowserStack real device cloud',
-    'Parallel execution',
-    'Artifacts, reports & failure notifications'
-  ]],
-  ['Process & AI', [
-    'Agile, Scrum sprints',
-    'Jira, ClickUp, OpenProject',
-    'Traceability matrices',
-    'Defect lifecycle management',
-    'RAG-based test case generation',
-    'AI-assisted failure log analysis'
-  ]]
+  ['Testing',
+   'Functional, regression, smoke, sanity and edge cases written for every release, and 700+ defects found across frontend and backend.',
+   ['Functional', 'Regression', 'Smoke', 'Sanity', 'Exploratory', 'End-to-end', 'UAT', 'Edge-case testing']],
+
+  ['Automation & CI/CD',
+   'The booking suite runs on BrowserStack real devices and browsers through GitHub Actions, scheduled weekly at night plus on demand, with report, screenshots and video kept for every run.',
+   ['Java', 'Selenium', 'Playwright', 'Appium', 'Page Object Model', 'BrowserStack', 'GitHub Actions']],
+
+  ['API, Performance & Security',
+   'REST APIs checked in Postman against what the backend actually stored; JMeter load, stress and spike runs surfaced bottlenecks before release, and every Android build scanned in MobSF.',
+   ['Postman', 'REST API testing', 'Apache JMeter (load, stress, spike)', 'MobSF', 'OWASP Mobile Top 10']],
+
+  ['Backend & Data',
+   'Wallet balances, refunds, coin expiry and user plans verified at the source, catching mismatches between what the app showed and what the backend had stored.',
+   ['Django admin', 'Internal dashboards', 'SQL', 'MySQL', 'Firebase']],
+
+  ['AI & LLM Testing',
+   'AI drafts test cases and edge cases from user stories, generates test data and helps track down flaky locators. Every output reviewed before it is used.',
+   ['DeepEval', 'RAG evaluation', 'AI-assisted test case design', 'Test data generation', 'Script debugging']],
+
+  ['Bug Tracking & Documentation',
+   'Every defect logged with steps, severity and video evidence, so it can be reproduced by someone who was not there.',
+   ['Jira', 'ClickUp', 'OpenProject', 'Excel (test cases)', 'Word (reports)', 'Bug lifecycle']],
+
+  ['Platforms & Process',
+   'The same journey tested on Android, iOS and web, in an Agile team shipping on a sprint cadence.',
+   ['Android', 'iOS', 'Web', 'Cross-browser', 'Git', 'GitHub', 'Agile / Scrum']]
+];
+
+const CERTS = [
+  'Appium Mobile Automation',
+  'Postman & REST API Testing',
+  'Apache JMeter',
+  'GitHub Actions CI/CD with Git & GitHub',
+  'ISTQB Foundation Level (CTFL) — in progress'
 ];
 
 const BULLETS = [
-  'Built Android end-to-end suites in Appium with Page Object Model, covering booking, payment, slot selection, family management, reschedule and cancel flows. Regression coverage up 80%.',
-  'Tested 30+ REST endpoints in Postman with boundary, negative and environment-based execution across multiple environments.',
-  'Engineered JMeter load, stress and spike plans that surfaced critical bottlenecks before production.',
-  'Audited Android builds in MobSF against the OWASP Mobile Top 10, flagging insecure storage and exposed endpoints.'
+  'Built a Page Object Model suite in Java for the flows re-checked every release. It runs on BrowserStack real devices and browsers through GitHub Actions, weekly at night plus on demand, keeping report, screenshots and video for every run.',
+  'Verified wallet balances, refunds, coin expiry and user plans in the Django admin and internal dashboards, catching mismatches between what the app showed and what the backend had stored.',
+  'Tested REST APIs in Postman with boundary and negative cases across multiple environments.',
+  'Engineered JMeter load, stress and spike plans that surfaced bottlenecks before release, and audited Android builds in MobSF against the OWASP Mobile Top 10.',
+  'Used AI to draft test cases and edge cases from user stories, generate test data and debug flaky locators, reviewing every output before use.',
+  'Tested 8+ signup types, each mapped to a different plan package, confirming every user received the right package and access.'
 ];
 
 /* Companion lines — the questions a tester actually asks */
