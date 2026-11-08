@@ -102,7 +102,7 @@ const SKILLS = [
 
   ['Automation & CI/CD',
    'The booking suite runs on BrowserStack real devices and browsers through GitHub Actions, scheduled weekly at night plus on demand, with report, screenshots and video kept for every run.',
-   ['Java', 'Selenium', 'Playwright', 'Appium', 'Page Object Model', 'BrowserStack', 'GitHub Actions']],
+   ['Java', 'Appium', 'Selenium', 'Playwright', 'Page Object Model', 'BrowserStack', 'GitHub Actions']],
 
   ['API, Performance & Security',
    'REST APIs checked in Postman against what the backend actually stored; JMeter load, stress and spike runs surfaced bottlenecks before release, and every Android build scanned in MobSF.',
@@ -114,15 +114,21 @@ const SKILLS = [
 
   ['AI & LLM Testing',
    'AI drafts test cases and edge cases from user stories, generates test data and helps track down flaky locators. Every output reviewed before it is used.',
-   ['DeepEval', 'RAG evaluation', 'AI-assisted test case design', 'Test data generation', 'Script debugging']],
+   ['DeepEval', 'RAG evaluation', 'AI-assisted test design', 'Test data generation', 'Script debugging']],
 
-  ['Bug Tracking & Documentation',
+  ['Tools & Process',
    'Every defect logged with steps, severity and video evidence, so it can be reproduced by someone who was not there.',
-   ['Jira', 'ClickUp', 'OpenProject', 'Excel (test cases)', 'Word (reports)', 'Bug lifecycle']],
+   ['Jira', 'ClickUp', 'OpenProject', 'Git', 'GitHub', 'Excel', 'Agile / Scrum', 'Bug lifecycle']],
 
-  ['Platforms & Process',
-   'The same journey tested on Android, iOS and web, in an Agile team shipping on a sprint cadence.',
-   ['Android', 'iOS', 'Web', 'Cross-browser', 'Git', 'GitHub', 'Agile / Scrum']]
+  ['Platforms',
+   'The same journey tested on Android, iOS and web, and across browsers.',
+   ['Android', 'iOS', 'Web', 'Cross-browser']]
+];
+
+/* The headline tools, shown without a click above the grouped list. */
+const CORE = [
+  'Java', 'Appium', 'Selenium', 'Playwright',
+  'BrowserStack', 'GitHub Actions', 'Postman', 'JMeter'
 ];
 
 const CERTS = [
@@ -133,13 +139,31 @@ const CERTS = [
   'ISTQB Foundation Level (CTFL) — in progress'
 ];
 
-const BULLETS = [
-  'Built a Page Object Model suite in Java for the flows re-checked every release. It runs on BrowserStack real devices and browsers through GitHub Actions, weekly at night plus on demand, keeping report, screenshots and video for every run.',
-  'Verified wallet balances, refunds, coin expiry and user plans in the Django admin and internal dashboards, catching mismatches between what the app showed and what the backend had stored.',
-  'Tested REST APIs in Postman with boundary and negative cases across multiple environments.',
-  'Engineered JMeter load, stress and spike plans that surfaced bottlenecks before release, and audited Android builds in MobSF against the OWASP Mobile Top 10.',
-  'Used AI to draft test cases and edge cases from user stories, generate test data and debug flaky locators, reviewing every output before use.',
-  'Tested 8+ signup types, each mapped to a different plan package, confirming every user received the right package and access.'
+const EXPERIENCE = [
+  {
+    role: 'Quality Assurance Analyst',
+    type: 'Full-time',
+    period: 'Apr 2026 – Present',
+    note: 'Promoted from QA Intern',
+    bullets: [
+      'Wallet coins, 5+ features: tested how coins are earned, redeemed, tracked and expired under many rules, including boundary and expiry edge cases. Documented each flow from the user’s point of view and found 120+ bugs across frontend and backend.',
+      'Refunds and collections, 4+ features: tested the full flow and logic across every status — pending, success, failed, partial — and reviewed every UI message so users know what happened and what to do next.',
+      'Backend validation: verified wallet balances, refunds, coin expiry and user plans in the Django admin and internal dashboards, catching mismatches between what the app showed and what the backend had stored.',
+      'Test automation and CI/CD: built a Page Object Model suite in Java and Appium for the flows re-checked every release. It runs on BrowserStack real devices through GitHub Actions, weekly at night plus on demand, saving report, screenshots and video for every run.',
+      'Performance and security: ran load, stress and spike tests in JMeter to find bottlenecks before release, and MobSF static scans on Android builds against the OWASP Mobile Top 10.',
+      'AI-assisted testing: used AI to draft test cases and edge cases from user stories, generate test data and debug flaky locators, reviewing every output before use.'
+    ]
+  },
+  {
+    role: 'QA Intern',
+    period: 'Sep 2025 – Mar 2026',
+    bullets: [
+      'Complex signup: tested 8+ signup types, each mapped to a different plan package, confirming every user received the correct package and access.',
+      'Booking flow: tested the end-to-end journey — slot selection, payment, family members, reschedule, cancel — on Android, iOS and web.',
+      'Test documentation and bug tracking: wrote functional, regression, smoke, sanity and edge cases in Excel, and bug reports with steps, severity and video evidence, tracked in Jira, ClickUp and OpenProject.',
+      'Release checks: ran UI checks before each release for layout, wording and consistency across platforms.'
+    ]
+  }
 ];
 
 /* Companion lines — the questions a tester actually asks */

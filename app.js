@@ -19,9 +19,9 @@
     '<path d="M1.5 7 L5 10.5 L11.5 2.5" fill="none" stroke="#17191c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 
   var BUG_SVG = '<svg aria-hidden="true" width="14" height="12" viewBox="0 0 14 12">' +
-    '<ellipse cx="7" cy="7.5" rx="3.8" ry="4.2" fill="#d6402b"></ellipse>' +
-    '<circle cx="7" cy="2.6" r="2" fill="#d6402b"></circle>' +
-    '<path d="M3.4 5.6 L0.8 4 M3.4 9 L0.8 10.4 M10.6 5.6 L13.2 4 M10.6 9 L13.2 10.4" stroke="#d6402b" stroke-width="1"></path>' +
+    '<ellipse cx="7" cy="7.5" rx="3.8" ry="4.2" fill="#d94f16"></ellipse>' +
+    '<circle cx="7" cy="2.6" r="2" fill="#d94f16"></circle>' +
+    '<path d="M3.4 5.6 L0.8 4 M3.4 9 L0.8 10.4 M10.6 5.6 L13.2 4 M10.6 9 L13.2 10.4" stroke="#d94f16" stroke-width="1"></path>' +
     '</svg>';
 
   var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -182,11 +182,29 @@
 
   $('#projects').innerHTML = PROJECTS.map(projectHTML).join('');
   $('#skills-list').innerHTML = SKILLS.map(skillHTML).join('');
+  $('#core-stack').innerHTML = CORE.map(function (t) {
+    return '<li>' + esc(t) + '</li>';
+  }).join('');
   $('#certs').innerHTML = CERTS.map(function (c) {
     return '<li>' + esc(c) + '</li>';
   }).join('');
-  $('#exp-list').innerHTML = BULLETS.map(function (b) {
-    return '<li>' + CHECK + '<span>' + esc(b) + '</span></li>';
+  $('#exp-list').innerHTML = EXPERIENCE.map(function (job) {
+    return '<div class="exp">' +
+      '<div class="exp-meta">' +
+      '<span class="nw">HummCare</span>' +
+      '<span class="nw dim">' + esc(job.period) + '</span>' +
+      '<span class="nw dim">Mumbai &middot; Hybrid</span>' +
+      '</div>' +
+      '<div class="exp-body">' +
+      '<h3 class="h3">' + esc(job.role) +
+      (job.type ? ' <span class="exp-type">' + esc(job.type) + '</span>' : '') +
+      '</h3>' +
+      (job.note ? '<p class="exp-note">' + esc(job.note) + '</p>' : '') +
+      '<ul class="exp-list">' +
+      job.bullets.map(function (b) {
+        return '<li>' + CHECK + '<span>' + esc(b) + '</span></li>';
+      }).join('') +
+      '</ul></div></div>';
   }).join('');
 
   /* -------------------------------------------------------- disclosures */
